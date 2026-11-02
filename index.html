@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5efdf">
+  <meta name="description" content="A classic brand tagline guessing game.">
+  <title>TAGLINE — Guess the Brand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand-logo" href="#" onclick="showScreen('home'); return false;">
+        <span class="logo-mark">T.</span>
+        <span>TAGLINE<small>THE BRAND GUESSING GAME</small></span>
+      </a>
+      <div class="topbar-label">THE CLASSIC EDITION</div>
+    </header>
+
+<section id="home" class="screen active">
+  <div class="hero">
+    <span class="eyebrow">✦ THE ART OF RECOGNITION ✦</span>
+    <h1>Every great brand<br>has a <em>story to tell.</em></h1>
+    <p class="hero-text">
+      Recognise the world's iconic brands through
+      the taglines that made them unforgettable.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="startGame()">
+        Start New Game <span>→</span>
+      </button>
+      <button class="btn btn-secondary" onclick="showScreen('rules')">
+        How to Play
+      </button>
+    </div>
+    <div class="hero-note">10 QUESTIONS · 20 ICONIC BRANDS</div>
+  </div>
+  <div class="hero-decoration">
+    <span class="decor-star">✳</span>
+    <span class="decor-circle">T</span>
+    <span class="decor-caption">A GAME OF<br>BRAND KNOWLEDGE</span>
+  </div>
+</section>
+
+<section id="rules" class="screen">
+  <div class="section-heading">
+    <span class="eyebrow">BEFORE YOU BEGIN</span>
+    <h2>How to <em>play.</em></h2>
+    <p>Read the rules, then put your brand knowledge to the test.</p>
+  </div>
+  <div class="rules-grid">
+    <article class="rule-card">
+      <span class="rule-number">01</span>
+      <h3>Read the tagline</h3>
+      <p>Identify the brand behind the famous slogan.</p>
+    </article>
+    <article class="rule-card">
+      <span class="rule-number">02</span>
+      <h3>Build the answer</h3>
+      <p>Select the shuffled letters to fill the answer boxes.</p>
+    </article>
+    <article class="rule-card">
+      <span class="rule-number">03</span>
+      <h3>Use your hints</h3>
+      <p>Reveal the industry and the first letter when needed.</p>
+    </article>
+    <article class="rule-card">
+      <span class="rule-number">04</span>
+      <h3>Use your lifeline</h3>
+      <p>The optional heart reveals four brand choices. Use it twice per game.</p>
+    </article>
+    <article class="rule-card">
+      <span class="rule-number">05</span>
+      <h3>Skip if needed</h3>
+      <p>Skip a question for zero points without losing a life.</p>
+    </article>
+    <article class="rule-card">
+      <span class="rule-number">06</span>
+      <h3>Earn your points</h3>
+      <p>Score 10, 7 or 5 points depending on hints used. You have three mistakes.</p>
+    </article>
+  </div>
+  <button class="btn btn-primary" onclick="startGame()">
+    I'm Ready — Start Game →
+  </button>
+  <button class="btn btn-secondary" onclick="showScreen('home')">
+    Back Home
+  </button>
+</section>
+
+<section id="game" class="screen">
+  <div class="game-top">
+    <button class="text-button" onclick="confirmQuit()">← Quit</button>
+    <span id="question-count">QUESTION 01 / 10</span>
+    <span id="mistakes-count">♥ ♥ ♥</span>
+  </div>
+
+  <div class="progress-track">
+    <div id="progress-bar" class="progress-fill"></div>
+  </div>
+
+  <div class="tagline-card">
+    <span class="eyebrow">WHO SAID IT?</span>
+    <span id="tagline-text" class="tagline-quote">
+      Your next iconic tagline awaits.
+    </span>
+    <span class="quote-decoration">”</span>
+  </div>
+
+  <div class="hints-row">
+    <button id="hint-industry" class="hint-card" onclick="useHint(0)">
+      <span class="hint-icon">✦</span>
+      <span><strong>Hint I</strong><small>Reveal industry</small></span>
+    </button>
+    <button id="hint-letter" class="hint-card" onclick="useHint(1)">
+      <span class="hint-icon">🔎</span>
+      <span><strong>Hint II</strong><small>Reveal first letter</small></span>
+    </button>
+  </div>
+
+  <div id="hint-message" class="hint-message" aria-live="polite"></div>
+
+  <div class="answer-area">
+    <span class="eyebrow">YOUR ANSWER</span>
+    <div id="answer-boxes" class="answer-boxes"></div>
+    <div id="letter-tiles" class="letter-tiles"></div>
+  </div>
+
+  <div id="lifeline-options" class="lifeline-options hidden">
+    <span class="eyebrow">CHOOSE THE BRAND</span>
+    <div id="brand-options" class="brand-options"></div>
+  </div>
+
+  <div class="game-actions">
+    <button class="btn btn-secondary" onclick="clearAnswer()">Clear</button>
+    <button class="btn btn-secondary" onclick="shuffleLetters()">Shuffle</button>
+    <button id="lifeline-button" class="btn btn-heart" onclick="useLifeline()">
+      ♥ Lifeline <span id="lifeline-count">2 left</span>
+    </button>
+    <button class="btn btn-secondary" onclick="skipQuestion()">Skip →</button>
+    <button class="btn btn-primary" onclick="checkAnswer()">Submit Answer</button>
+  </div>
+  <div id="game-feedback" class="game-feedback" aria-live="polite"></div>
+  <div class="score-line">CURRENT SCORE <strong id="current-score">0</strong></div>
+</section>
+
+<section id="results" class="screen">
+  <div class="results-heading">
+    <span class="eyebrow">YOUR GAME SUMMARY</span>
+    <h2>Well <em>played.</em></h2>
+    <p>Every tagline is a little piece of brand history.</p>
+  </div>
+  <div class="score-card">
+    <span>FINAL SCORE</span>
+    <strong id="final-score">0</strong>
+    <small>POINTS EARNED</small>
+  </div>
+  <div class="results-stats">
+    <div><strong id="correct-total">0</strong><span>Correct</span></div>
+    <div><strong id="skipped-total">0</strong><span>Skipped</span></div>
+    <div><strong id="mistakes-total">0</strong><span>Mistakes</span></div>
+  </div>
+  <h3 class="answers-title">The answers</h3>
+  <div id="answer-review" class="answer-review"></div>
+  <button class="btn btn-primary" onclick="startGame()">Play Again ↻</button>
+  <button class="btn btn-secondary" onclick="showScreen('home')">Back Home</button>
+</section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+    <main id="app">
+      <!-- More screens will be added here -->
+    </main>
+
+    <footer class="site-footer">
+      <span>THINK. CONNECT. GUESS.</span>
+      <span>MADE FOR THE BRAND ENTHUSIAST</span>
+    </footer>
+  </div>
+</body>
+</html>
